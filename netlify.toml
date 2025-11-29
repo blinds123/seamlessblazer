@@ -1,0 +1,12 @@
+[build]
+  publish = "."
+  command = "echo 'Static site'"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
