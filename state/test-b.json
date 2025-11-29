@@ -1,0 +1,18 @@
+{
+  "test": "$19 Popup Flow",
+  "passed": false,
+  "size_selected": true,
+  "popup_appeared": false,
+  "decline_clicked": false,
+  "redirected_to_simpleswap": true,
+  "exchange_url": "https://simpleswap.io/exchange?id=cjzn7x38u67lvy6e",
+  "exchange_id": "cjzn7x38u67lvy6e",
+  "error": "CRITICAL FAILURE: Order bump popup did NOT appear when clicking $19 button. Page redirected directly to SimpleSwap instead of showing the popup first.",
+  "timestamp": "2025-11-29T00:00:00.000Z",
+  "details": {
+    "flow": "Size M was successfully selected, then $19 PRE-ORDER button was clicked, but instead of showing order bump popup, page immediately redirected to SimpleSwap exchange page.",
+    "expected": "After clicking $19 button, order bump popup (#orderBumpPopup) should appear with upsell offer, then redirect to SimpleSwap only after user declines.",
+    "actual": "No popup appeared. Direct redirect to SimpleSwap occurred.",
+    "impact": "Users cannot see or accept the order bump upsell offer. Revenue opportunity lost."
+  }
+}

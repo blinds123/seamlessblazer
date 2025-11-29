@@ -1,0 +1,29 @@
+{
+  "test": "Pool Integration",
+  "passed": true,
+  "pool_url": "https://simpleswap-automation-1.onrender.com",
+  "pool_status": "running",
+  "healthy": true,
+  "pool_19": 6,
+  "pool_29": 8,
+  "pool_59": 5,
+  "total": 19,
+  "minimum_required": 10,
+  "error": null,
+  "timestamp": "2025-11-29T05:29:58.052Z",
+  "details": {
+    "version": "14.0.0",
+    "mode": "dynamic-pool",
+    "configured_prices": [19, 29, 59],
+    "total_max_size": 30,
+    "service_name": "SimpleSwap Dynamic Pool Server [PRODUCTION]"
+  },
+  "pass_criteria_met": {
+    "pool_server_responds": true,
+    "health_check_healthy": true,
+    "pool_19_min_3": true,
+    "pool_29_min_3": true,
+    "pool_59_min_3": true,
+    "total_min_10": true
+  }
+}

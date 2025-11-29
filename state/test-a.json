@@ -1,0 +1,20 @@
+{
+  "test": "$59 Direct Flow",
+  "passed": false,
+  "size_selected": true,
+  "popup_appeared": true,
+  "popup_trigger": "size_button_click",
+  "redirected_to_simpleswap": true,
+  "exchange_url": "https://simpleswap.io/exchange?id=cjzn7x38u67lvy6e",
+  "exchange_id": "cjzn7x38u67lvy6e",
+  "error": "Order bump popup appeared when clicking size button. Expected: NO popup for $59 direct flow. The popup showed 'COMPLETE THE LOOK!' with silk pocket square upsell offer.",
+  "timestamp": "2025-11-29T00:00:00Z",
+  "flow_details": {
+    "step_1": "Navigated to https://seamlessblazer.netlify.app",
+    "step_2": "Clicked size M button",
+    "step_3": "Order bump popup appeared (UNEXPECTED)",
+    "step_4": "Clicked 'No thanks, just the blazer'",
+    "step_5": "Successfully redirected to SimpleSwap with exchange ID"
+  },
+  "notes": "The popup appeared immediately after clicking the size button, not the CTA button. This suggests the size selection is triggering the pre-order flow ($19) which includes the order bump, rather than the direct $59 flow."
+}

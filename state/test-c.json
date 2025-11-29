@@ -1,0 +1,21 @@
+{
+  "test": "Visual/UX",
+  "passed": true,
+  "images": {
+    "total": 15,
+    "loaded": 15,
+    "broken": 0,
+    "broken_list": []
+  },
+  "accordion": {
+    "found": false,
+    "works": null
+  },
+  "mobile": {
+    "tested": true,
+    "horizontal_scroll": false
+  },
+  "console_errors": [],
+  "error": null,
+  "timestamp": "2025-11-29T00:00:00Z"
+}
