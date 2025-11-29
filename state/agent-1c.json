@@ -1,0 +1,58 @@
+{
+  "pool_mode": "existing",
+  "pool_url": "https://simpleswap-automation-1.onrender.com",
+  "pool_19": 6,
+  "pool_29": 8,
+  "pool_59": 5,
+  "total": 19,
+  "max_total": 30,
+  "healthy": true,
+  "status": "complete",
+  "verification": {
+    "server_status": "running",
+    "version": "14.0.0",
+    "mode": "dynamic-pool",
+    "health_check": "healthy",
+    "all_pools_above_minimum": true,
+    "min_size_per_pool": 3
+  },
+  "pool_details": {
+    "19": {
+      "description": "Pre-order only",
+      "current": 6,
+      "max": 10,
+      "min": 3,
+      "status": "ready"
+    },
+    "29": {
+      "description": "Pre-order + Order Bump",
+      "current": 8,
+      "max": 10,
+      "min": 3,
+      "status": "ready"
+    },
+    "59": {
+      "description": "Ship Today",
+      "current": 5,
+      "max": 10,
+      "min": 3,
+      "status": "ready"
+    }
+  },
+  "endpoints": {
+    "buy_now": "POST https://simpleswap-automation-1.onrender.com/buy-now",
+    "health": "GET https://simpleswap-automation-1.onrender.com/health",
+    "stats": "GET https://simpleswap-automation-1.onrender.com/stats"
+  },
+  "notes": [
+    "Pool server is healthy and running production version 14.0.0",
+    "All three price points ($19, $29, $59) have exchanges ready",
+    "Each pool exceeds minimum required size of 3 exchanges",
+    "Total pool capacity: 19/30 exchanges (63%)",
+    "/admin/init-pool endpoint attempted but returned errors - pool already operational",
+    "Server is production-ready for Seamless Blazer deployment"
+  ],
+  "timestamp": "2025-11-29T05:17:00.000Z",
+  "agent": "1C",
+  "task": "Pool Manager - Existing Pool Verification"
+}
