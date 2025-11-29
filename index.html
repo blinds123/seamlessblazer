@@ -64,7 +64,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
 .fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
 .fade-in.visible{opacity:1;transform:translateY(0)}
 
-/* Testimonial Styles */
+/* Testimonial Styles - FULL-WIDTH IMAGES */
 .testimonial-card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #f0f0f0}
 .testimonial-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .testimonial-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover}
@@ -73,8 +73,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
 .testimonial-platform{display:flex;align-items:center;gap:6px;color:#666;font-size:12px}
 .testimonial-platform svg{width:14px;height:14px}
 .testimonial-stars{color:#ffc107;font-size:14px;letter-spacing:2px}
-.testimonial-text{font-size:15px;line-height:1.6;color:#333}
+.testimonial-text{font-size:15px;line-height:1.6;color:#333;margin-bottom:16px}
 .testimonial-date{color:#999;font-size:12px;margin-top:12px}
+.testimonial-photo{width:100%;height:auto;border-radius:12px;margin-top:16px;object-fit:cover;aspect-ratio:4/5}
+
+/* Accordion Styles */
+.accordion-item{border-bottom:1px solid #e0e0e0}
+.accordion-header{width:100%;background:none;border:none;padding:20px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left;font-size:18px;font-weight:600;transition:all 0.2s}
+.accordion-header:hover{color:#1e3a5f}
+.accordion-icon{transition:transform 0.3s ease;font-size:20px;color:#666}
+.accordion-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;padding:0 0}
+.accordion-content.active{max-height:500px;padding:0 0 20px 0}
+.accordion-header.active .accordion-icon{transform:rotate(180deg)}
 
 /* Size Selector */
 .size-btn{padding:14px 12px;border:2px solid #e0e0e0;background:#fff;border-radius:8px;cursor:pointer;font-weight:600;transition:all 0.2s;font-size:14px}
@@ -88,7 +98,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
 .gallery{position:static}
 .container{padding:0 16px}
 .cta-btn{font-size:16px;padding:16px;min-height:56px}
-.size-btn{min-width:44px;min-height:44px}
+.size-btn{min-width:44px;min-height:44px;font-size:13px}
+.accordion-header{font-size:16px;padding:16px 0}
+.accordion-content{font-size:14px}
+.testimonial-card{padding:20px}
+.testimonial-photo{aspect-ratio:3/4}
 }
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -161,7 +175,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
           <span class="old-price">$99</span>
           <span class="badge">40% OFF</span>
         </div>
-        <div style="color:#dc3545;font-size:14px;font-weight:600;margin-bottom:20px">2,847 sold in the last 48 hours</div>
+        <div style="color:#dc3545;font-size:14px;font-weight:600;margin-bottom:24px">2,847 sold in the last 48 hours</div>
+
+        <!-- SIZE SELECTOR MOVED HERE - ABOVE CTAs -->
+        <div style="margin-bottom:24px">
+          <h3 style="margin-bottom:12px;font-weight:600;font-size:16px;color:#1a1a1a">Select Your Size:</h3>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px">
+            <button class="size-btn" data-size="S" onclick="selectSize(this, 'S')">S</button>
+            <button class="size-btn" data-size="M" onclick="selectSize(this, 'M')">M</button>
+            <button class="size-btn" data-size="L" onclick="selectSize(this, 'L')">L</button>
+            <button class="size-btn" data-size="XL" onclick="selectSize(this, 'XL')">XL</button>
+            <button class="size-btn" data-size="XXL" disabled>XXL<span style="display:block;font-size:10px;color:#dc3545;margin-top:2px">Sold Out</span></button>
+          </div>
+          <div style="color:#666;font-size:13px;text-align:center">Free returns within 30 days</div>
+        </div>
 
         <button class="cta-btn cta-primary fade-in visible" id="primaryCTA" onclick="handleAddToCart('primary')">
           GET MINE NOW - $59
@@ -341,11 +368,13 @@ function handleAddToCart(type) {
   window.currentOrderType = type;
 
   if (!window.selectedSize) {
-    const sizeSection = document.querySelector('.size-grid');
-    if (sizeSection) {
-      sizeSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      sizeSection.style.animation = 'pulse 1s ease-in-out';
+    // Scroll to size selector in product info section
+    const sizeButtons = document.querySelectorAll('.size-btn');
+    if (sizeButtons.length > 0) {
+      sizeButtons[0].parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      sizeButtons[0].parentElement.style.animation = 'pulse 1s ease-in-out';
     }
+    alert('Please select a size first');
     return;
   }
 
@@ -448,69 +477,95 @@ function loadRemainingContent() {
   const lazyContent = document.getElementById('lazyContent');
 
   lazyContent.innerHTML = `
-    <!-- Size Selector -->
-    <div class="fade-in" style="padding:40px 20px;border-top:1px solid #f0f0f0;max-width:1200px;margin:0 auto">
-      <h3 style="margin-bottom:20px;font-weight:600;font-size:18px">Select Your Size:</h3>
-      <div class="size-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:12px;margin-bottom:30px">
-        ${[{s:'S',a:true},{s:'M',a:true},{s:'L',a:true},{s:'XL',a:true},{s:'XXL',a:false}].map(size =>
-          `<button class="size-btn" data-size="${size.s}" ${!size.a ? 'disabled' : ''} onclick="selectSize(this, '${size.s}')">${size.s}${!size.a ? '<span style="display:block;font-size:10px;color:#dc3545;margin-top:2px">Sold Out</span>' : ''}</button>`
-        ).join('')}
-      </div>
-      <div style="background:#f8f9fa;border-left:3px solid #1e3a5f;padding:20px;border-radius:8px">
-        <strong style="color:#1e3a5f">Free Returns + Fast Shipping</strong><br>
-        <span style="color:#666;font-size:14px">Not satisfied? Return within 30 days for a full refund.</span>
+    <!-- Product Details - ACCORDION VERSION -->
+    <div class="fade-in" style="padding:40px 20px;background:#f8f9fa;max-width:800px;margin:0 auto">
+      <h2 style="text-align:center;font-size:28px;font-weight:700;margin-bottom:30px">The Details</h2>
+      <div style="background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.04);padding:0 24px">
+
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>Fit & Style</span>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <ul style="color:#555;font-size:15px;line-height:1.8;list-style:none;padding:0">
+              <li style="margin:8px 0">✓ Seamless construction - no awkward seams</li>
+              <li style="margin:8px 0">✓ Professional tailored fit</li>
+              <li style="margin:8px 0">✓ Modern architectural silhouette</li>
+              <li style="margin:8px 0">✓ Structured yet comfortable</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>Fabric & Care</span>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <ul style="color:#555;font-size:15px;line-height:1.8;list-style:none;padding:0">
+              <li style="margin:8px 0">✓ Buttery-smooth premium fabric</li>
+              <li style="margin:8px 0">✓ Professional navy colorway</li>
+              <li style="margin:8px 0">✓ Wrinkle-resistant material</li>
+              <li style="margin:8px 0">✓ Dry clean or gentle hand wash</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion-item" style="border-bottom:none">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <span>Styling Tips</span>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <ul style="color:#555;font-size:15px;line-height:1.8;list-style:none;padding:0">
+              <li style="margin:8px 0">✓ Pair with tailored pants for boardroom ready</li>
+              <li style="margin:8px 0">✓ Style over slip dress for evening events</li>
+              <li style="margin:8px 0">✓ Casual with vintage denim</li>
+              <li style="margin:8px 0">✓ Add silk pocket square to elevate</li>
+            </ul>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Product Details -->
-    <div class="fade-in" style="padding:60px 20px;background:#f8f9fa;max-width:1200px;margin:0 auto">
-      <h2 style="text-align:center;font-size:28px;font-weight:700;margin-bottom:40px">The Details</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px">
-        <div style="background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.04)">
-          <h3 style="font-size:18px;font-weight:600;margin-bottom:16px">Fit & Style</h3>
-          <ul style="color:#555;font-size:15px;line-height:1.8;list-style:none;padding:0">
-            <li>Seamless construction - no awkward seams</li>
-            <li>Professional tailored fit</li>
-            <li>Modern architectural silhouette</li>
-            <li>Structured yet comfortable</li>
-          </ul>
-        </div>
-        <div style="background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.04)">
-          <h3 style="font-size:18px;font-weight:600;margin-bottom:16px">Fabric & Care</h3>
-          <ul style="color:#555;font-size:15px;line-height:1.8;list-style:none;padding:0">
-            <li>Buttery-smooth premium fabric</li>
-            <li>Professional navy colorway</li>
-            <li>Wrinkle-resistant material</li>
-            <li>Dry clean or gentle hand wash</li>
-          </ul>
-        </div>
-        <div style="background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.04)">
-          <h3 style="font-size:18px;font-weight:600;margin-bottom:16px">Styling Tips</h3>
-          <ul style="color:#555;font-size:15px;line-height:1.8;list-style:none;padding:0">
-            <li>Pair with tailored pants for boardroom ready</li>
-            <li>Style over slip dress for evening events</li>
-            <li>Casual with vintage denim</li>
-            <li>Add silk pocket square to elevate</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Why Choose Section -->
+    <!-- Why Choose Section - PREMIUM SVG ICONS -->
     <div class="fade-in" style="padding:60px 20px;max-width:1200px;margin:0 auto">
       <h2 style="text-align:center;font-size:28px;font-weight:700;margin-bottom:40px">Why Everyone's Obsessed</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:20px">
-        ${[
-          { icon: '✨', title: 'Seamless Perfection', desc: 'No awkward seams digging in - just buttery smooth comfort all day' },
-          { icon: '💼', title: 'Professional Style', desc: 'Clean, sophisticated silhouette that commands respect in any room' },
-          { icon: '🎯', title: 'Versatile Design', desc: 'From boardroom to brunch - one blazer, infinite possibilities' }
-        ].map(f => `
-          <div style="text-align:center;padding:30px">
-            <div style="font-size:48px;margin-bottom:20px">${f.icon}</div>
-            <h3 style="margin-bottom:15px;font-weight:600">${f.title}</h3>
-            <p style="color:#666;font-size:14px;line-height:1.6">${f.desc}</p>
-          </div>
-        `).join('')}
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:30px">
+
+        <div style="text-align:center;padding:30px">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.5" style="margin:0 auto 20px">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+          <h3 style="margin-bottom:15px;font-weight:600;font-size:18px">Seamless Perfection</h3>
+          <p style="color:#666;font-size:14px;line-height:1.6">No awkward seams digging in - just buttery smooth comfort all day long</p>
+        </div>
+
+        <div style="text-align:center;padding:30px">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.5" style="margin:0 auto 20px">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+            <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
+          </svg>
+          <h3 style="margin-bottom:15px;font-weight:600;font-size:18px">Professional Style</h3>
+          <p style="color:#666;font-size:14px;line-height:1.6">Clean, sophisticated silhouette that commands respect in any room</p>
+        </div>
+
+        <div style="text-align:center;padding:30px">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.5" style="margin:0 auto 20px">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <h3 style="margin-bottom:15px;font-weight:600;font-size:18px">Versatile Design</h3>
+          <p style="color:#666;font-size:14px;line-height:1.6">From boardroom to brunch - one blazer, infinite styling possibilities</p>
+        </div>
+
       </div>
     </div>
 
@@ -566,6 +621,7 @@ function renderTestimonials(count) {
       </div>
       <p class="testimonial-text">${t.text}</p>
       <div class="testimonial-date">${t.date}</div>
+      <img src="./images/testimonials/testimonial-${String(t.img).padStart(2, '0')}.jpeg" alt="${t.name} wearing the blazer" class="testimonial-photo" loading="lazy">
     </div>
   `).join('');
 }
@@ -594,6 +650,7 @@ function loadMoreReviews() {
       </div>
       <p class="testimonial-text">${t.text}</p>
       <div class="testimonial-date">${t.date}</div>
+      <img src="./images/testimonials/testimonial-${String(t.img).padStart(2, '0')}.jpeg" alt="${t.name} wearing the blazer" class="testimonial-photo" loading="lazy">
     `;
     grid.appendChild(card);
 
@@ -606,6 +663,24 @@ function loadMoreReviews() {
 
   reviewsLoaded = testimonials.length;
   document.getElementById('loadMoreBtn').style.display = 'none';
+}
+
+// Accordion toggle function
+function toggleAccordion(header) {
+  const content = header.nextElementSibling;
+  const isActive = header.classList.contains('active');
+
+  // Close all accordions
+  document.querySelectorAll('.accordion-header').forEach(h => {
+    h.classList.remove('active');
+    h.nextElementSibling.classList.remove('active');
+  });
+
+  // Open clicked accordion if it wasn't active
+  if (!isActive) {
+    header.classList.add('active');
+    content.classList.add('active');
+  }
 }
 
 // Initialize on load
