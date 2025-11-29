@@ -107,6 +107,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(30,58,95,0.4)}50%{box-shadow:0 0 0 10px rgba(30,58,95,0)}}
+
+/* Scarcity Popup - Premium Toast Style */
+.scarcity-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:#fff;padding:16px 24px;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.15);display:flex;align-items:center;gap:12px;z-index:9999;opacity:0;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);max-width:90vw}
+.scarcity-popup.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.scarcity-popup.hide{opacity:0;transform:translateX(-50%) translateY(-100px)}
+.scarcity-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#dc3545 0%,#ff6b6b 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.scarcity-content{flex:1;min-width:0}
+.scarcity-title{font-weight:700;font-size:15px;color:#1a1a1a;margin:0 0 2px 0}
+.scarcity-subtitle{font-size:13px;color:#666;margin:0}
+
+@media(max-width:768px){
+.scarcity-popup{top:10px;padding:14px 20px}
+.scarcity-icon{width:36px;height:36px}
+.scarcity-title{font-size:14px}
+.scarcity-subtitle{font-size:12px}
+}
 </style>
 
 <!-- Prefetch Additional Images -->
@@ -115,6 +131,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
 </head>
 
 <body>
+
+<!-- Scarcity Popup -->
+<div id="scarcityPopup" class="scarcity-popup">
+  <div class="scarcity-icon">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+    </svg>
+  </div>
+  <div class="scarcity-content">
+    <div class="scarcity-title">XL just sold out!</div>
+    <div class="scarcity-subtitle">Someone grabbed the last one</div>
+  </div>
+</div>
 
 <!-- Order Bump Popup -->
 <div id="orderBumpPopup" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;align-items:center;justify-content:center;padding:20px">
@@ -180,7 +209,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
         <!-- SIZE SELECTOR MOVED HERE - ABOVE CTAs -->
         <div style="margin-bottom:24px">
           <h3 style="margin-bottom:12px;font-weight:600;font-size:16px;color:#1a1a1a">Select Your Size:</h3>
-          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px">
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px">
+            <button class="size-btn" data-size="XS" onclick="selectSize(this, 'XS')">XS</button>
             <button class="size-btn" data-size="S" onclick="selectSize(this, 'S')">S</button>
             <button class="size-btn" data-size="M" onclick="selectSize(this, 'M')">M</button>
             <button class="size-btn" data-size="L" onclick="selectSize(this, 'L')">L</button>
@@ -238,6 +268,26 @@ document.addEventListener('DOMContentLoaded', function() {
   loadThumbnails();
   loadRemainingContent();
   perfMetrics.mark('content-loaded');
+
+  // XL Scarcity Timer - Sells out after 15 seconds
+  setTimeout(() => {
+    const xlButton = document.querySelector('[data-size="XL"]');
+    if (xlButton && !xlButton.disabled) {
+      xlButton.disabled = true;
+      xlButton.innerHTML = 'XL<span style="display:block;font-size:10px;color:#dc3545;margin-top:2px">Sold Out</span>';
+      xlButton.style.opacity = '0.4';
+      xlButton.style.cursor = 'not-allowed';
+      xlButton.classList.remove('selected');
+
+      // If XL was selected, deselect it
+      if (window.selectedSize === 'XL') {
+        window.selectedSize = null;
+      }
+
+      // Show scarcity popup
+      showScarcityPopup();
+    }
+  }, 15000);
 });
 
 // ESC key to close popup
@@ -301,6 +351,26 @@ function selectSize(button, size) {
   button.style.borderColor = '#1e3a5f';
 
   window.selectedSize = size;
+}
+
+// Scarcity Popup Function
+function showScarcityPopup() {
+  const popup = document.getElementById('scarcityPopup');
+  if (!popup) return;
+
+  // Show popup with animation
+  popup.classList.add('show');
+
+  // Auto-dismiss after 3 seconds
+  setTimeout(() => {
+    popup.classList.remove('show');
+    popup.classList.add('hide');
+
+    // Remove hide class after animation completes
+    setTimeout(() => {
+      popup.classList.remove('hide');
+    }, 400);
+  }, 3000);
 }
 
 // SimpleSwap Pool Integration
